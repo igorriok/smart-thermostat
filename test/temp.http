@@ -1,0 +1,12 @@
+GET http://192.168.0.177:3000/settings HTTP/1.1
+
+###
+
+POST http://192.168.0.177:3000/settings HTTP/1.1
+content-type: application/json
+
+{
+    "tempSet": 26
+}
+
+###
