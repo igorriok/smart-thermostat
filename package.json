@@ -14,8 +14,5 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "rpi-433-v3": "^1.2.0"
-  },
-  "devDependencies": {
-    "typescript": "^4.5.2"
   }
 }
