@@ -3,8 +3,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  let temperatureSet = req.app.locals.temperatureSet;
-  res.send('Smart thermostat ' + temperatureSet);
+  let themperatureSet = req.app.locals.themperatureSet;
+  res.send({
+    Themperature: themperatureSet,
+    Heat: req.app.locals.heat
+  });
 });
 
 module.exports = router;
