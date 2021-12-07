@@ -5,8 +5,8 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   let themperatureSet = req.app.locals.themperatureSet;
   res.send({
-    Themperature: themperatureSet,
-    Heat: req.app.locals.heat
+    themperature: themperatureSet,
+    heat: req.app.locals.heat
   });
 });
 
