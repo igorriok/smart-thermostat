@@ -11,7 +11,7 @@ POST http://192.168.0.177:30578/settings HTTP/1.1
 content-type: application/json
 
 {
-    "themperatureSet": 26
+    "temperatureSet": 26
 }
 
 ###

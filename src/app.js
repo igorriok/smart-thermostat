@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.locals.themperatureSet = 24;
+app.locals.temperatureSet = 24;
 app.locals.heat = false;
 
 app.use('/', indexRouter);
@@ -47,15 +47,15 @@ app.use(function(err, req, res, next) {
   res.json(err);
 });
 
-function checkTemperature(themperature, themperatureSet) {
+function checkTemperature(temperature, temperatureSet) {
   
-	console.log("checking temperature: " + themperature 
-	+ " Themperature set: " + themperatureSet 
+	console.log("checking temperature: " + temperature 
+	+ " Temperature set: " + temperatureSet 
 	+ " Heat: " + app.locals.heat);
 
   	const deviation = 0.3;
 
-	if (themperatureSet - themperature > deviation) {
+	if (temperatureSet - temperature > deviation) {
 		app.locals.heat = true;
 	} else {
 		app.locals.heat = false;
@@ -63,6 +63,6 @@ function checkTemperature(themperature, themperatureSet) {
 
 }
 
-setInterval(checkTemperature, 1000, 23, app.locals.themperatureSet);
+setInterval(checkTemperature, 1000, 23, app.locals.temperatureSet);
 
 module.exports = app;
