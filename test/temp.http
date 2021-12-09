@@ -15,3 +15,7 @@ content-type: application/json
 }
 
 ###
+
+GET http://raspberrypi.local:30578/data HTTP/1.1
+
+###

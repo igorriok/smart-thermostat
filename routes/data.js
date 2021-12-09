@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const reportData = require('../src/thermo');
+// const reportData = require('../src/thermo');
 
 /* GET data listing. */
 router.get('/', async function(req, res, next) {
 
-  const thermoData = await reportData();
+  console.log(req.app.locals.pressure);
 
   res.send({ 
-    temperature: thermoData.temperature, 
-    pressure: thermoData.pressure, 
-    humidity: thermoData.humidity
+    temperature: req.app.locals.temperature, 
+    pressure: req.app.locals.pressure, 
+    humidity: req.app.locals.humidity
   });
 });
 

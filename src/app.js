@@ -9,6 +9,7 @@ var cors = require('cors');
 var indexRouter = require('../routes/index');
 var dataRouter = require('../routes/data');
 var settingsRouter = require('../routes/settings');
+const reportData = require('../src/thermo');
 
 var app = express();
 
@@ -26,6 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.locals.temperatureSet = 24;
 app.locals.heat = false;
+app.locals.temperature = 0;
+app.locals.humidity = 0;
+app.locals.pressure = 0;
 
 app.use('/', indexRouter);
 app.use('/data', dataRouter);
@@ -47,15 +51,21 @@ app.use(function(err, req, res, next) {
   res.json(err);
 });
 
-function checkTemperature(temperature, temperatureSet) {
+async function checkTemperature() {
   
-	console.log("checking temperature: " + temperature 
-	+ " Temperature set: " + temperatureSet 
+	console.log("checking temperature: " + app.locals.temperature 
+	+ " Temperature set: " + app.locals.temperatureSet 
 	+ " Heat: " + app.locals.heat);
+
+	const thermoData = await reportData();
+
+	app.locals.temperature = thermoData.temperature;
+	app.locals.humidity = thermoData.humidity;
+	app.locals.pressure = thermoData.pressure;
 
   	const deviation = 0.3;
 
-	if (temperatureSet - temperature > deviation) {
+	if (app.locals.temperatureSet - app.locals.temperature > deviation) {
 		app.locals.heat = true;
 	} else {
 		app.locals.heat = false;
@@ -63,6 +73,6 @@ function checkTemperature(temperature, temperatureSet) {
 
 }
 
-setInterval(checkTemperature, 1000, 23, app.locals.temperatureSet);
+setInterval(checkTemperature, 1000);
 
 module.exports = app;
