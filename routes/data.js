@@ -5,8 +5,6 @@ var router = express.Router();
 /* GET data listing. */
 router.get('/', async function(req, res, next) {
 
-  console.log(req.app.locals.pressure);
-
   res.send({ 
     temperature: req.app.locals.temperature, 
     pressure: req.app.locals.pressure, 
