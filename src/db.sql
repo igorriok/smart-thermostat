@@ -1,0 +1,8 @@
+CREATE TABLE SENSORS (
+   TIME date UNIQUE NOT NULL,
+   TEMPERATURE float(4) NOT NULL,
+   HUMIDITY float(4),
+   PRESSURE float(4),
+   TEMPERATURESET integer,
+   HEAT boolean
+);
