@@ -16,11 +16,11 @@ const reportData = async () => {
 
     const reading = await sensor.read();
     
-    console.log(
+    /* console.log(
 		`${format(reading.temperature)}°C, ` +
 		`${format(reading.pressure)} hPa, ` +
 		`${format(reading.humidity)}%`
-    );
+    ); */
 
     await sensor.close();
 
