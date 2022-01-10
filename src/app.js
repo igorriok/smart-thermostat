@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 //const bodyParser = require('body-parser');
+var rpi433 = require('rpi-433-v3');
+
 
 var indexRouter = require('../routes/index');
 var dataRouter = require('../routes/data');
@@ -30,6 +32,10 @@ app.locals.heat = false;
 app.locals.temperature = 0;
 app.locals.humidity = 0;
 app.locals.pressure = 0;
+app.locals.rfEmitter = rpi433.emitter({
+	pin: 0,                     //Send through GPIO 0 (or Physical PIN 11)
+	pulseLength: 350            //Send the code with a 350 pulse length
+  });
 
 app.use('/', indexRouter);
 app.use('/data', dataRouter);
@@ -67,9 +73,35 @@ async function checkTemperature() {
   	const deviation = 0.3;
 
 	if (app.locals.temperatureSet - app.locals.temperature > deviation) {
-		app.locals.heat = true;
+
+		if (app.locals.heat === false) {
+
+			app.locals.heat = true;
+
+			app.locals.rfEmitter.sendCode(1, {pin: 0})
+				.then(function(stdout) {
+					console.log('Code sent: ', stdout);
+					res.send("ok");
+				}, function(error) {
+					console.log('Code was not sent, reason: ', error);
+					res.send(error);
+				});
+		}
 	} else {
-		app.locals.heat = false;
+
+		if (app.locals.heat === true) {
+
+			app.locals.heat = false;
+
+			app.locals.rfEmitter.sendCode(0, {pin: 0})
+				.then(function(stdout) {
+					console.log('Code sent: ', stdout);
+					res.send("ok");
+				}, function(error) {
+					console.log('Code was not sent, reason: ', error);
+					res.send(error);
+				});
+		}
 	}
 
 }
