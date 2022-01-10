@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
-var rpi433 = require('rpi-433-v3');
 //const bodyParser = require('body-parser');
 
 var indexRouter = require('../routes/index');
@@ -76,16 +75,5 @@ async function checkTemperature() {
 }
 
 setInterval(checkTemperature, 1000);
-
-
-rfSniffer = rpi433.sniffer({
-	pin: 2,                     //Snif on GPIO 2 (or Physical PIN 13)
-	debounceDelay: 500          //Wait 500ms before reading another code
-});
- 
-// Receive (data is like {code: xxx, pulseLength: xxx})
-rfSniffer.on('data', function (data) {
-  	console.log('Code received: ' + data.code + ' pulse length : ' + data.pulseLength);
-});
 
 module.exports = app;
