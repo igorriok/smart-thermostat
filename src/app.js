@@ -8,9 +8,9 @@ var cors = require('cors');
 var rpi433 = require('rpi-433-v3');
 
 
-var indexRouter = require('../routes/index');
-var dataRouter = require('../routes/data');
-var settingsRouter = require('../routes/settings');
+var indexRouter = require('./routes/index');
+var dataRouter = require('./routes/data');
+var settingsRouter = require('./routes/settings');
 const reportData = require('../src/thermo');
 
 var app = express();
@@ -110,8 +110,11 @@ async function checkTemperature() {
 		}
 	}
 
+	return app.locals.heat;
 }
 
 setInterval(checkTemperature, 1000);
+
+app.locals.checkTemperature = checkTemperature;
 
 module.exports = app;

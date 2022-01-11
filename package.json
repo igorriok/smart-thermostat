@@ -16,5 +16,9 @@
     "morgan": "~1.9.1",
     "rpi-433-v3": "^1.2.0",
     "wiring-pi": "^2.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
