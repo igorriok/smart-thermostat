@@ -1,0 +1,44 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": [
+      "plugin:react/recommended",
+      "google"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react",
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "indent": [2, "tab"],
+      "no-tabs": 0,
+      "quotes": ["warn", "double"],
+      "max-len": ["warn", { "code": 130 }],
+      "require-jsdoc": ["warn", {
+        "require": {
+          "FunctionDeclaration": false
+        }
+      }],
+      "no-trailing-spaces": ["warn",{
+        "skipBlankLines": true
+      }],
+      "react/prop-types": "off",
+      "react/no-children-prop": ["warn"],
+      "react/display-name": ["warn"],
+      "camelcase": "warn",
+      "no-mixed-spaces-and-tabs": "warn",
+      "semi": "off",
+      "new-cap": "warn"
+    }
+  }
+  

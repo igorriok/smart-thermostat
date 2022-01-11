@@ -44,8 +44,7 @@ router.post('/heat/', async function(req, res, next) {
       console.log('Code was not sent, reason: ', error);
       res.send(error);
     });
-
-  res.send("ok");
+	
 });
 
 module.exports = router;
