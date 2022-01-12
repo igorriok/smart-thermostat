@@ -8,9 +8,9 @@ var cors = require('cors');
 var rpi433 = require('rpi-433-v3');
 
 
-var indexRouter = require('../routes/index');
-var dataRouter = require('../routes/data');
-var settingsRouter = require('../routes/settings');
+var indexRouter = require('./routes/index');
+var dataRouter = require('./routes/data');
+var settingsRouter = require('./routes/settings');
 const reportData = require('../src/thermo');
 
 var app = express();
@@ -36,6 +36,7 @@ app.locals.rfEmitter = rpi433.emitter({
 	pin: 0,                     //Send through GPIO 0 (or Physical PIN 11)
 	pulseLength: 350            //Send the code with a 350 pulse length
   });
+app.locals.manualHeat = false;
 
 app.use('/', indexRouter);
 app.use('/data', dataRouter);
@@ -57,6 +58,7 @@ app.use(function(err, req, res, next) {
   res.json(err);
 });
 
+
 async function checkTemperature() {
   
 	/* console.log("checking temperature: " + app.locals.temperature 
@@ -64,48 +66,55 @@ async function checkTemperature() {
 	+ " Heat: " + app.locals.heat);
 	*/
 
-	const thermoData = await reportData();
+	if (!app.locals.manualHeat) {
+		
+		const thermoData = await reportData();
 
-	app.locals.temperature = thermoData.temperature;
-	app.locals.humidity = thermoData.humidity;
-	app.locals.pressure = thermoData.pressure;
+		app.locals.temperature = thermoData.temperature;
+		app.locals.humidity = thermoData.humidity;
+		app.locals.pressure = thermoData.pressure;
 
-  	const deviation = 0.3;
+		const deviation = 0.3;
 
-	if (app.locals.temperatureSet - app.locals.temperature > deviation) {
+		if (app.locals.temperatureSet - app.locals.temperature > deviation) {
 
-		if (app.locals.heat === false) {
+			if (app.locals.heat !== true) {
 
-			app.locals.heat = true;
+				app.locals.heat = true;
 
-			app.locals.rfEmitter.sendCode(1, {pin: 0})
-				.then(function(stdout) {
-					console.log('Code sent: ', stdout);
-					res.send("ok");
-				}, function(error) {
-					console.log('Code was not sent, reason: ', error);
-					res.send(error);
-				});
-		}
-	} else {
+				app.locals.rfEmitter.sendCode(1, {pin: 0})
+					.then(function(stdout) {
+						console.log('Code sent: ', stdout);
+						res.send("ok");
+					}, function(error) {
+						console.log('Code was not sent, reason: ', error);
+						res.send(error);
+					});
+			}
 
-		if (app.locals.heat === true) {
+		} else {
 
-			app.locals.heat = false;
+			if (app.locals.heat !== false) {
 
-			app.locals.rfEmitter.sendCode(0, {pin: 0})
-				.then(function(stdout) {
-					console.log('Code sent: ', stdout);
-					res.send("ok");
-				}, function(error) {
-					console.log('Code was not sent, reason: ', error);
-					res.send(error);
-				});
+				app.locals.heat = false;
+
+				app.locals.rfEmitter.sendCode(0, {pin: 0})
+					.then(function(stdout) {
+						console.log('Code sent: ', stdout);
+						res.send("ok");
+					}, function(error) {
+						console.log('Code was not sent, reason: ', error);
+						res.send(error);
+					});
+			}
 		}
 	}
 
+	return app.locals.heat;
 }
 
 setInterval(checkTemperature, 1000);
+
+app.locals.checkTemperature = checkTemperature;
 
 module.exports = app;
